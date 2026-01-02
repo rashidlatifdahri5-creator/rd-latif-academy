@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RD LATIF ACADEMY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- PDF & QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+html{scroll-behavior:smooth}
+body{background:#000;color:#fff}
+
+/* HEADER */
+header{
+position:fixed;top:0;width:100%;z-index:999;
+display:flex;align-items:center;gap:12px;
+padding:14px 25px;background:rgba(0,0,0,.8);
+backdrop-filter:blur(10px);
+border-bottom:1px solid orange
+}
+.logo{
+width:45px;height:45px;border-radius:50%;
+background:linear-gradient(135deg,brown,orange);
+display:flex;align-items:center;justify-content:center;
+font-weight:bold
+}
+nav{margin-left:auto}
+nav a{color:orange;margin:0 10px;text-decoration:none;font-weight:600}
+nav a:hover{color:#fff}
+
+/* HOME */
+#home{height:100vh;position:relative}
+#home video{
+position:absolute;top:0;left:0;width:100%;height:100%;
+object-fit:cover;filter:brightness(.35)
+}
+#home::after{
+content:"";position:absolute;top:0;left:0;width:100%;height:100%;
+background:linear-gradient(to bottom,rgba(0,0,0,.6),#000)
+}
+.home-text{
+position:absolute;top:50%;left:50%;
+transform:translate(-50%,-50%);
+text-align:center;font-size:46px;font-weight:600;
+color:orange;z-index:2
+}
+
+/* SECTIONS */
+section{padding:130px 25px;text-align:center}
+h2{color:orange;margin-bottom:20px}
+.box{
+max-width:1100px;margin:auto;
+background:#111;padding:30px;border-radius:18px
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px
+}
+.card{
+background:#000;border:1px solid orange;
+border-radius:15px;padding:20px
+}
+.price{font-size:30px;color:orange}
+
+/* BUTTON */
+.btn{
+padding:12px 28px;border:none;border-radius:30px;
+background:linear-gradient(135deg,brown,orange);
+color:#fff;font-weight:600;cursor:pointer;margin:8px
+}
+
+/* INPUT */
+input{
+width:100%;padding:12px;margin:8px 0;
+border-radius:8px;border:1px solid orange;
+background:#000;color:#fff
+}
+
+.hidden{display:none}
+
+/* FOOTER */
+footer{
+padding:20px;text-align:center;
+border-top:1px solid orange;color:#aaa
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">RD</div>
+<b>RD LATIF ACADEMY</b>
+<nav>
+<a href="#home">Home</a>
+<a href="#courses">Courses</a>
+<a href="#certificate">Certificate</a>
+<a href="#payment">Payment</a>
+<a href="#admin">Admin</a>
+</nav>
+</header>
+
+<!-- HOME -->
+<section id="home">
+<video autoplay muted loop>
+<source src="videos/vido.webm" type="video/webm">
+</video>
+<div class="home-text">WELCOME TO<br>RD LATIF ACADEMY</div>
+</section>
+
+<!-- COURSES -->
+<section id="courses">
+<h2>Our Courses</h2>
+<div class="box grid">
+<div class="card">
+<h3>Web Development</h3>
+<p class="price">Rs 2000</p>
+<p>HTML • CSS • JavaScript</p>
+<a class="btn" href="https://wa.me/923053159115" target="_blank">Join WhatsApp</a>
+</div>
+
+<div class="card">
+<h3>Certificate Only</h3>
+<p class="price">Rs 500</p>
+<p>PDF + QR Code</p>
+<a class="btn" href="#certificate">Apply</a>
+</div>
+</div>
+</section>
+
+<!-- CERTIFICATE -->
+<section id="certificate">
+<h2>Certificate Generator</h2>
+<div class="box">
+
+<input id="sname" placeholder="Student Name">
+<input id="semail" placeholder="Email">
+<button class="btn" onclick="makeCert()">Generate</button>
+
+<div id="cert" style="background:#fff;color:#000;padding:20px;border-radius:12px;margin-top:20px">
+<h2 style="color:brown">RD LATIF ACADEMY</h2>
+<p>This certifies that</p>
+<h3 id="cname">Student</h3>
+<p id="cemail"></p>
+<div id="qr"></div>
+</div>
+
+<button class="btn" onclick="downloadPDF()">Download PDF</button>
+</div>
+</section>
+
+<!-- PAYMENT -->
+<section id="payment">
+<h2>Payment</h2>
+<div class="box">
+<p>📱/ JazzCash</p>
+<p>0305-3159115</p>
+<p>Send payment screenshot on WhatsApp</p>
+</div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin">
+<h2>Admin Panel</h2>
+<div class="box">
+<input id="pin" placeholder="Admin PIN">
+<button class="btn" onclick="adminLogin()">Login</button>
+<div id="panel" class="hidden">
+<h3>Registered Students</h3>
+<ul id="list"></ul>
+</div>
+</div>
+</section>
+
+<footer>© 2025 RD LATIF ACADEMY</footer>
+
+<script>
+// BASIC SECURITY
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.onkeydown=e=>{
+if(e.key==="F12"||(e.ctrlKey&&e.shiftKey&&e.key==="I"))e.preventDefault();
+}
+
+// CERTIFICATE
+function makeCert(){
+if(!sname.value||!semail.value){alert("Fill all fields");return;}
+cname.innerText=sname.value;
+cemail.innerText=semail.value;
+qr.innerHTML="";
+new QRCode(qr,"RD-"+Date.now());
+
+let data=JSON.parse(localStorage.getItem("students")||"[]");
+data.push({name:sname.value,email:semail.value});
+localStorage.setItem("students",JSON.stringify(data));
+}
+
+// PDF
+function downloadPDF(){
+html2pdf().from(cert).save("RD_Certificate.pdf");
+}
+
+// ADMIN
+function adminLogin(){
+if(pin.value!=="1234"){alert("Wrong PIN");return;}
+panel.classList.remove("hidden");
+let data=JSON.parse(localStorage.getItem("students")||"[]");
+list.innerHTML=data.map(s=>`<li>${s.name} – ${s.email}</li>`).join("");
+}
+</script>
+
+</body>
+</html>
